@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 })
 
 
-app.post("/bin/:secret",(req, res)=>{
+app.post("/bin/create/:secret",(req, res)=>{
     if(req.params.secret != "beepbapbook"){
         res.send({success:false,message:"u scrub"});
         return;
@@ -25,7 +25,7 @@ app.post("/bin/:secret",(req, res)=>{
 });
 
 
-app.patch("/bin/:binId",(req,res)=>{
+app.post("/bin/:binId",(req,res)=>{
     var sentData = req.body;
     var binId = req.params.binId;
     
