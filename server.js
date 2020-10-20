@@ -1,5 +1,6 @@
 
 const express = require('express');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 
@@ -28,11 +29,17 @@ app.post("/bin/create/:secret",(req, res)=>{
 app.post("/bin/:binId",(req,res)=>{
     var sentData = req.body;
     var binId = req.params.binId;
-    
+
+    if(Object.keys(sentData).length === 0){
+        res.send({success:false,message:"Empty Object"});
+        return;
+    }
     if(!Bins.hasOwnProperty(binId)){
         res.send({success:false,message:"Bad id"});
         return;
     }
+    
+    console.log("Recieved:" + JSON.stringify(sentData));
     sentData.createdDate = Date();
     Bins[binId].push(sentData);
     
@@ -53,13 +60,6 @@ app.get("/bin/:binId",(req,res)=>{
 })
 
 
-
-
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
-
 function randomString(){
     const letters = "abcdefghijklmnopqrstuvwxyzRTYUIOPASDFGHJKLZXCVBNM";
     let output = "";
@@ -70,7 +70,38 @@ function randomString(){
     return output;
 }
 
-function saveBinsToFile(){
 
-    
+function saveBinsToFile(){
+    fs.writeFile(__dirname+'/private/JsonBins.json',JSON.stringify({Bins:Bins}),(error)=>{
+        if(error){ throw error;}
+    });
 }
+
+function setBinsFromFile(){
+    fs.readFile(__dirname+'/private/JsonBins.json','utf8', function(error, data) {
+        if(error){ throw error; }
+        console.log(data);
+        var rawData = JSON.parse(data);//{Bins:[]}
+        Bins = rawData.Bins;
+      });
+}
+
+
+//============Setup==============
+
+setBinsFromFile();
+
+setInterval(() => {
+    saveBinsToFile();
+}, 120000);
+
+//=============End Setup==========
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
+
