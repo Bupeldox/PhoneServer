@@ -46,16 +46,14 @@ button {
 <script>
 var data;
 var charlimit = 77;
-
+var binId = "yKVddcjCYnHCLbMB";
 function getData(){
-	$.ajax("https://api.jsonbin.io/b/5f8dece1adfa7a7bbea5a263/latest",{
-		headers:{
-			"secret-key":"$2b$10$iIlq4qBjy61jFMjzTNwty.CuEzk5SzLUx9yyitP/C365JodnL3MMe",
-			//not so secret key ^
-		},
-		success:function(rdata){
-			data = rdata;
-			DrawPostits(rdata.postits)
+	$.ajax({
+		url: '/bin/'+binId,
+		type: 'GET',
+		contentType: 'application/json',
+		success: function(response){
+			DrawPostits(response.data);
 		}
 	});
 }
@@ -74,8 +72,6 @@ function DrawPostits(postits){
 }
 
 $(".new:not(.moving)").on("click",function(){
-	//debugger;
-	
 	if(newPostit){
 		return;
 	}
@@ -112,27 +108,19 @@ function place(e){
 
 function makeNewPostit(text,position){
 	console.log("making");
-	data.postits.push({
+	var postitToAdd = {
 		text:escapeHtml(text),
-		position:position,
-		created:Date.now
+		position:position
+	};
+	$.ajax({
+    	url: '/bin/'+binId,
+		type: 'POST',
+		data:JSON.stringify(postitToAdd),
+        contentType: 'application/json',
+        success: function(response){
+            console.log(JSON.stringify(response));
+        }
 	});
-	
-	//$.post("https://api.jsonbin.io/b/5f8dbe3fadfa7a7bbea5953a",data,"json");
-	$.ajax("https://api.jsonbin.io/b/5f8dece1adfa7a7bbea5a263",{
-		type:"PUT",
-		contentType:"application/json",
-		
-		headers:{
-			"secret-key":"$2b$10$iIlq4qBjy61jFMjzTNwty.CuEzk5SzLUx9yyitP/C365JodnL3MMe",
-			"versioning": false,
-		},
-		data:JSON.stringify(data),
-		//success:function(a,b,c){debugger;},
-		
-		
-	});	
-	
 }
 
 function createPostitHtml(text,position={x:1000,y:1000}){
