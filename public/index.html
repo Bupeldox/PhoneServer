@@ -1,0 +1,155 @@
+
+
+<div class="postits">
+	
+</div>
+<button class="new">Create your postit</button>
+
+
+<style>
+body {
+	margin:0;
+	position:relative;
+}
+
+.postits {
+	position:relative;
+	overflow:hidden;
+	height:100vh;
+}
+
+.postit {
+	position:absolute;
+	background-color:#ffd;
+	height:100px;
+	width:100px;
+	padding:10px;
+	hyphens:manual;
+	overflow:hidden;
+	border-bottom-right-radius:20px;
+	overflow-wrap: anywhere;
+	box-shadow: 6px 14px 12px -7px #4442;
+}
+
+button {
+	position:absolute;
+	top:10px;
+	left:10px;
+     padding:20px;
+}
+</style>
+
+
+<script src="https://unpkg.com/draggabilly@2.3.0/dist/draggabilly.pkgd.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+var data;
+var charlimit = 77;
+
+function getData(){
+	$.ajax("https://api.jsonbin.io/b/5f8dece1adfa7a7bbea5a263/latest",{
+		headers:{
+			"secret-key":"$2b$10$iIlq4qBjy61jFMjzTNwty.CuEzk5SzLUx9yyitP/C365JodnL3MMe",
+			//not so secret key ^
+		},
+		success:function(rdata){
+			data = rdata;
+			DrawPostits(rdata.postits)
+		}
+	});
+}
+
+function Setup(){
+	getData()
+//	DrawPostits([{text:"hello there",position:{x:200,y:200}},{text:"hello there 123",position:{x:400,y:200}}]);
+}
+
+var newPostit;
+function DrawPostits(postits){
+	postits.forEach(i=>{
+		
+		createPostitHtml(i.text,i.position);
+	});
+}
+
+$(".new:not(.moving)").on("click",function(){
+	//debugger;
+	
+	if(newPostit){
+		return;
+	}
+	var text = prompt("What do you want your postit to say? (max "+charlimit+" chars)");
+	
+	if(text==null || text.length>charlimit){
+		return;
+	}
+	
+	console.log("text recieved");
+	$(this).text("Drag to place postit");
+	newPostit = {};
+	newPostit.text = text;
+	$(this).addClass("moving");
+	var draggie = $('.moving').draggabilly().on("dragEnd",place);
+});
+
+function place(e){
+	var conf = confirm("Do you want to place you postit here?");
+	
+	if(!conf){
+		return;
+	}
+	
+	var offset = $(".moving").offset();
+	newPostit.position = {x:offset.left,y:offset.top};
+	
+	$(".moving").removeClass("moving");
+	$("button").remove();
+	
+	createPostitHtml(newPostit.text,newPostit.position);
+	makeNewPostit(newPostit.text,newPostit.position);
+}
+
+function makeNewPostit(text,position){
+	console.log("making");
+	data.postits.push({
+		text:escapeHtml(text),
+		position:position,
+		created:Date.now
+	});
+	
+	//$.post("https://api.jsonbin.io/b/5f8dbe3fadfa7a7bbea5953a",data,"json");
+	$.ajax("https://api.jsonbin.io/b/5f8dece1adfa7a7bbea5a263",{
+		type:"PUT",
+		contentType:"application/json",
+		
+		headers:{
+			"secret-key":"$2b$10$iIlq4qBjy61jFMjzTNwty.CuEzk5SzLUx9yyitP/C365JodnL3MMe",
+			"versioning": false,
+		},
+		data:JSON.stringify(data),
+		//success:function(a,b,c){debugger;},
+		
+		
+	});	
+	
+}
+
+function createPostitHtml(text,position={x:1000,y:1000}){
+	
+	var htmlString = 
+		    
+		    '<div class="postit" style="top:'+position.y+'px;left:'+position.x+'px;">'+
+		    escapeHtml(text)+
+		    '</div>';
+		$(".postits").append(htmlString);
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+Setup();
+</script>
