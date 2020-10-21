@@ -99,11 +99,13 @@ function addObjectToBin(binId, object) {
 //Files
 function saveBinsToFile(){
     if(!NeedToSave){
-        console.log("No activity, No save");
+        return;
     }
     var path = __dirname+'/private/JsonBins.json';
     console.log("Saving to :" + path);
-
+    console.log("Saving at :" + Date());
+    Bins.lastSaved = ""+Date();
+    
     fs.writeFile(path,JSON.stringify(Bins),(error)=>{
         if(error){ throw error;}
     });
