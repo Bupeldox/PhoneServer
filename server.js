@@ -54,7 +54,6 @@ app.post("/bin/:binId", (req, res) => {
         return;
     }
     addObjectToBin(binId,sentData);
-    NeedToSave = true;
     res.send({ success: true });
 });
 
@@ -76,6 +75,7 @@ function createBin(){
     let binId = randomString();
     Bins[binId] = [];
     console.log("Creating Bin:" + binId);
+    NeedToSave = true;
     return binId;
 }
 
@@ -93,6 +93,7 @@ function addObjectToBin(binId, object) {
         object.createdDate = Date();
     }   
     Bins[binId].push(object);
+    NeedToSave = true;
     console.log("Added:" + JSON.stringify(object));
 }
 
@@ -107,8 +108,12 @@ function saveBinsToFile(){
     Bins.lastSaved = ""+Date();
     
     fs.writeFile(path,JSON.stringify(Bins),(error)=>{
-        if(error){ throw error;}
+        if(error){ throw error;}else{
+            NeedToSave = false;
+        }
+        
     });
+    
 }
 
 function setBinsFromFile(){
