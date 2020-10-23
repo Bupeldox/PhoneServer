@@ -30,6 +30,12 @@ body {
 	overflow-wrap: anywhere;
 	box-shadow: 6px 14px 12px -7px #4442;
 }
+.postit.prepost {
+	height:0;
+	padding-top:0;
+	padding-bottom:0;
+	transform:skewx(30deg) translateX(70px);
+}
 
 button {
 	position:absolute;
@@ -126,11 +132,15 @@ function makeNewPostit(text,position){
 function createPostitHtml(text,position={x:1000,y:1000}){
 	
 	var htmlString = 
-		    
-		    '<div class="postit" style="top:'+position.y+'px;left:'+position.x+'px;">'+
-		    escapeHtml(text)+
-		    '</div>';
-		$(".postits").append(htmlString);
+    	'<div class="postit prepost" style="top:'+position.y+'px;left:'+position.x+'px;">'+
+	    escapeHtml(text)+
+    	'</div>';
+	
+	$(".postits").append(htmlString);
+	
+	setTimeout(function(){
+		$(".prepost").removeClass("prepost");
+	},10);
 }
 
 function escapeHtml(unsafe) {
