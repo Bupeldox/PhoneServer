@@ -72,9 +72,11 @@ function Setup(){
 
 var newPostit;
 function DrawPostits(postits){
+	var counter = 0;
 	postits.forEach(i=>{
 		
-		createPostitHtml(i.text,i.position);
+		createPostitHtml(i.text,i.position,counter);
+		counter++;
 	});
 }
 
@@ -130,19 +132,21 @@ function makeNewPostit(text,position){
 	});
 }
 
-function createPostitHtml(text,position={x:1000,y:1000}){
+function createPostitHtml(text,position={x:1000,y:1000},counter){
 	
 	var htmlString = 
-    	'<div class="postit prepost" style="top:'+position.y+'px;left:'+position.x+'px;">'+
+	    '<div class="postit prepost" '+
+	    'style="top:'+position.y+'px;left:'+position.x+'px;transition-delay:'+	 
+	    (2*counter/data.postits.length)+'s">'+
 	    escapeHtml(text)+
-    	'</div>';
-	
+	    '</div>';
 	$(".postits").append(htmlString);
-	
 	setTimeout(function(){
 		$(".prepost").removeClass("prepost");
 	},10);
+	
 }
+
 
 function escapeHtml(unsafe) {
     return unsafe
