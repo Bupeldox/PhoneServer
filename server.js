@@ -22,6 +22,10 @@ function randomString(){
     return output;
 }
 
+function getFormattedDate(){
+   return Date().split(" ").slice(1,5).join(" ");
+}
+
 
 //====Routing
 
@@ -65,7 +69,6 @@ app.get("/bin/:binId",(req,res)=>{
         return;
     }
     var toSend = readBin(binId);
-    console.log("Getting bin:" + binId);
     res.send({success:true,data:toSend});
 })
 
@@ -74,13 +77,13 @@ app.get("/bin/:binId",(req,res)=>{
 function createBin(){
     let binId = randomString();
     Bins[binId] = [];
-    console.log("Creating Bin:" + binId);
+    console.log("Creating Bin:" + binId +" "+ getFormattedDate());
     NeedToSave = true;
     return binId;
 }
 
 function readBin(binId){
-    console.log("reading bin: "+binId);
+    console.log("reading bin: "+binId +" "+ getFormattedDate());
     if(Bins.hasOwnProperty(binId)){
         return Bins[binId];
     }else{
@@ -94,7 +97,7 @@ function addObjectToBin(binId, object) {
     }   
     Bins[binId].push(object);
     NeedToSave = true;
-    console.log("Added:" + JSON.stringify(object));
+    console.log("Added:" + JSON.stringify(object) +" at "+ getFormattedDate());
 }
 
 //Files
@@ -104,7 +107,7 @@ function saveBinsToFile(){
     }
     var path = __dirname+'/private/JsonBins.json';
     console.log("Saving to :" + path);
-    console.log("Saving at :" + Date());
+    console.log("Saving at :" + getFormattedDate());
     Bins.lastSaved = ""+Date();
     
     fs.writeFile(path,JSON.stringify(Bins),(error)=>{
