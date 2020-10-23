@@ -138,7 +138,7 @@ function createPostitHtml(text,position={x:1000,y:1000},counter){
 	var htmlString = 
 	    '<div class="postit prepost" '+
 	    'style="top:'+position.y+'px;left:'+position.x+'px;transition-delay:'+	 
-	    (2*counter/data.postits.length)+'s">'+
+	    (2*counter/data.length)+'s">'+
 	    escapeHtml(text)+
 	    '</div>';
 	$(".postits").append(htmlString);
