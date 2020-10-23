@@ -60,6 +60,7 @@ function getData(){
 		type: 'GET',
 		contentType: 'application/json',
 		success: function(response){
+			data = response;
 			DrawPostits(response.data);
 		}
 	});
