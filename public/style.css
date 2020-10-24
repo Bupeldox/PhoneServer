@@ -1,1 +1,40 @@
 
+body {
+	margin:0;
+	position:relative;
+}
+
+.postits {
+	position:relative;
+	overflow:hidden;
+	height:100vh;
+	font-size:13.3px;
+	font-family:cursive;
+}
+
+.postit {
+	transition:1s;
+	position:absolute;
+	background-color:#ffd;
+	height:100px;
+	width:100px;
+	padding:10px;
+	hyphens:manual;
+	overflow:hidden;
+	border-bottom-right-radius:20px;
+	overflow-wrap: anywhere;
+	box-shadow: 6px 14px 12px -7px #4442;
+}
+.postit.prepost {
+	height:0;
+	padding-top:0;
+	padding-bottom:0;
+	transform:skewx(30deg) translateX(70px);
+}
+
+button {
+	position:absolute;
+	top:10px;
+	left:10px;
+     padding:20px;
+}
