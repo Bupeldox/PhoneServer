@@ -31,7 +31,14 @@ function getFormattedDate(){
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
-})
+});
+
+app.get('/assets/:filename', (req,res) => {
+    var filename = req.params.filename;
+    res.sendFile(__dirname + '/public/'+filename);
+});
+
+
 
 //Create
 app.post("/bin/create/:secret", (req, res) => {
