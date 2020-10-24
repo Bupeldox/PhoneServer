@@ -1,117 +1,29 @@
+  
+ <link rel="stylesheet" href="/assets/styles.css">
 
 <div class="postits">
-	
+	<div class="postit prepost noPlace">
+		Basically, I wanted to host a website, and i had this idea for a while
+	</div>
+	<div class="postit prepost noPlace">
+		I cba to have a server but i kinda want to host it myself so...
+	</div>
+	<div class="postit prepost noPlace">
+		This website is hosted on my old andrioid phone using Termux!, the battery lasts for like 3 days.
+	</div>
+	<div class="postit prepost noPlace">
+		I want to have the phone charged by a solar panel and just leave it on the roof of a shed.
+	</div>
 </div>
 <button class="new">Create your postit</button>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-
-var data;
-var charlimit = 77;
-var binId = "yKVddcjCYnHCLbMB";
-function getData(){
-	$.ajax({
-		url: '/bin/'+binId,
-		type: 'GET',
-		contentType: 'application/json',
-		success: function(response){
-			data = response.data;
-			DrawPostits(data);
-		}
+	$(()=>{
+		$(".postit").each((i,e)=>{
+			$(e).css("transition-delay",(2*i/$(".postit").length)+"s"
+		});
+		$(".prepost").removeClass(".prepost");
 	});
-}
-
-function Setup(){
-	getData()
-//	DrawPostits([{text:"hello there",position:{x:200,y:200}},{text:"hello there 123",position:{x:400,y:200}}]);
-}
-
-var newPostit;
-function DrawPostits(postits){
-	var counter = 0;
-	postits.forEach(i=>{
-		
-		createPostitHtml(i.text,i.position,counter);
-		counter++;
-	});
-}
-
-$(".new:not(.moving)").on("click",function(){
-	if(newPostit){
-		return;
-	}
-	var text = prompt("What do you want your postit to say? (max "+charlimit+" chars)");
-	
-	if(text==null || text.length>charlimit){
-		return;
-	}
-	
-	console.log("text recieved");
-	$(this).text("Drag to place postit");
-	newPostit = {};
-	newPostit.text = text;
-	$(this).addClass("moving");
-	var draggie = $('.moving').draggabilly().on("dragEnd",place);
-});
-
-function place(e){
-	var conf = confirm("Do you want to place you postit here?");
-	
-	if(!conf){
-		return;
-	}
-	
-	var offset = $(".moving").offset();
-	newPostit.position = {x:offset.left,y:offset.top};
-	
-	$(".moving").removeClass("moving");
-	$("button").remove();
-	
-	createPostitHtml(newPostit.text,newPostit.position);
-	makeNewPostit(newPostit.text,newPostit.position);
-}
-
-function makeNewPostit(text,position){
-	console.log("making");
-	var postitToAdd = {
-		text:escapeHtml(text),
-		position:position
-	};
-	$.ajax({
-    	url: '/bin/'+binId,
-		type: 'POST',
-		data:JSON.stringify(postitToAdd),
-        contentType: 'application/json',
-        success: function(response){
-            console.log(JSON.stringify(response));
-        }
-	});
-}
-
-function createPostitHtml(text,position={x:1000,y:1000},counter){
-	
-	var htmlString = 
-	    '<div class="postit prepost" '+
-	    'style="top:'+position.y+'px;left:'+position.x+'px;transition-delay:'+	 
-	    (2*counter/data.length)+'s">'+
-	    escapeHtml(text)+
-	    '</div>';
-	$(".postits").append(htmlString);
-	setTimeout(function(){
-		$(".prepost").removeClass("prepost");
-	},10);
-	
-}
-
-
-function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
-Setup();
 </script>
