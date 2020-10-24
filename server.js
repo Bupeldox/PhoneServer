@@ -30,6 +30,10 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get('/why', (req, res) => {
+    res.sendFile(__dirname + '/public/why.html');
+});
+
 app.get('/assets/:filename', (req,res) => {
     var filename = req.params.filename;
     res.sendFile(__dirname + '/public/'+filename);
@@ -39,6 +43,7 @@ app.get('/assets/:filename', (req,res) => {
 
 //Create
 app.post("/bin/create/:secret", (req, res) => {
+    //var password = fs.readFileSync(__dirname+'/private/SupahSecrets.txt');
     if (req.params.secret != "beepbapbook") {
         res.send({ success: false, message: "u scrub" });
         return;
