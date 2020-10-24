@@ -1,8 +1,5 @@
-const { createSecretKey } = require('crypto');
 const express = require('express');
 const fs = require('fs');
-const cors = require('cors');
-const { start } = require('repl');
 const app = express();
 const port = 3000;
 
@@ -141,14 +138,7 @@ function setBinsFromFile(){
 //===Startup
 
 function startup(){
-    /*
-    testing save
-    var myBinId = createBin();
-    addObjectToBin(myBinId,{text:"the first text?!"});
-    console.log(JSON.stringify(readBin(myBinId)));
 
-    saveBinsToFile();
-    */
     setBinsFromFile();
 
     setInterval(() => {

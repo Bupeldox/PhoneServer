@@ -11,6 +11,12 @@ body {
 	font-size:13.3px;
 	font-family:serif;
 }
+.postits.static{
+	display: flex;
+	flex-flow: row wrap;
+	padding:30px;
+	height:auto;
+}
 
 .postit {
 	transition:1s;
@@ -24,6 +30,10 @@ body {
 	border-bottom-right-radius:20px;
 	overflow-wrap: anywhere;
 	box-shadow: 6px 14px 12px -7px #4442;
+}
+.postit.noPlace{
+	position: relative;
+	margin:20px;
 }
 .postit.prepost {
 	height:0;
