@@ -33,6 +33,10 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+app.get("/why",(req,res)=>{
+     res.sendFile(__dirname + '/public/why.html');
+});
+
 app.get('/assets/:filename', (req,res) => {
     var filename = req.params.filename;
     res.sendFile(__dirname + '/public/'+filename);
