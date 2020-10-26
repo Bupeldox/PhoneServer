@@ -30,8 +30,13 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+<<<<<<< HEAD
 app.get('/why', (req, res) => {
     res.sendFile(__dirname + '/public/why.html');
+=======
+app.get("/why",(req,res)=>{
+     res.sendFile(__dirname + '/public/why.html');
+>>>>>>> 3d3c037dbd865f56f095f8fba2e5255b230f7fa5
 });
 
 app.get('/assets/:filename', (req,res) => {
