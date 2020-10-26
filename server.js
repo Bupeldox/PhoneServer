@@ -57,6 +57,8 @@ app.post("/bin/create/:secret", (req, res) => {
 app.post("/bin/:binId", (req, res) => {
     var sentData = req.body;
     var binId = req.params.binId;
+    
+    sentData = JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g,"*Redacted*");
 
     if (Object.keys(sentData).length === 0) {
         res.send({ success: false, message: "Empty Object" });
