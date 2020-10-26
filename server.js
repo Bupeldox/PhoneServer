@@ -30,18 +30,13 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-<<<<<<< HEAD
 app.get('/why', (req, res) => {
     res.sendFile(__dirname + '/public/why.html');
-=======
-app.get("/why",(req,res)=>{
-     res.sendFile(__dirname + '/public/why.html');
->>>>>>> 3d3c037dbd865f56f095f8fba2e5255b230f7fa5
 });
 
 app.get('/assets/:filename', (req,res) => {
     var filename = req.params.filename;
-    res.sendFile(__dirname + '/public/'+filename);
+    res.sendFile(__dirname + '/public/assets/'+filename);
 });
 
 
@@ -63,7 +58,8 @@ app.post("/bin/:binId", (req, res) => {
     var sentData = req.body;
     var binId = req.params.binId;
     
-    sentData = JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g,"*Redacted*");
+    //Dont save urls
+    sentData = JSON.parse(JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g,"*Redacted*"));
 
     if (Object.keys(sentData).length === 0) {
         res.send({ success: false, message: "Empty Object" });
