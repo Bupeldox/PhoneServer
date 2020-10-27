@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Trispace&display=swap');
+
+body {
+	margin:0;
+	position:relative;
+	overflow: hidden;
+	color:#020301;
+}
+
+.postits {
+	position:relative;
+	overflow:hidden;
+	height:calc(100vh - 50px);
+	font-size:13.3px;
+	font-family:serif;
+}
+.postits.static{
+	display: flex;
+	flex-flow: row wrap;
+	padding:30px;
+	height:auto;
+}
+
+.postit {
+	transition:1s;
+	position:absolute;
+	background-color:#ffd;
+	height:100px;
+	width:100px;
+	padding:10px;
+	hyphens:manual;
+	overflow:hidden;
+	border-bottom-right-radius:20px;
+	overflow-wrap: anywhere;
+	box-shadow: 6px 14px 12px -7px #4442;
+}
+.postit.noPlace{
+	position: relative;
+	margin:20px;
+}
+.postit.prepost {
+	height:0;
+	padding-top:0;
+	padding-bottom:0;
+	transform:skewx(30deg) translateX(70px);
+}
+
+button {
+	position:absolute;
+	top:10px;
+	left:10px;
+    padding:20px;
+}
+
+.container{
+	position: relative;
+}
+
+.header{
+	height:45px;
+	overflow: hidden;
+	margin:10px;
+	font-family: 'Trispace', sans-serif;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.hiddenAnchor{
+	color: inherit; /* blue colors for links too */
+  	text-decoration: inherit; /* no underline */
+}
+
+header * {
+	color:inherit!important;
+}

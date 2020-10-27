@@ -1,162 +1,126 @@
+<link rel="stylesheet" href="/assets/styles.css">
 
-
-<div class="postits">
-	
+<div class="header">
+	<a href="/" class="hiddenAnchor"><h2>Postits</h2></a>
+	<a href="/why">Why doh?</a>
 </div>
-<button class="new">Create your postit</button>
+<div class="container">
+	<div class="postits">
+		
+	</div>
+	<button class="new">Create your postit</button>
+</div>
 
-
-<style>
-body {
-	margin:0;
-	position:relative;
-}
-
-.postits {
-	position:relative;
-	overflow:hidden;
-	height:100vh;
-	font-size:13.3px;
-	font-family:cursive;
-}
-
-.postit {
-	transition:1s;
-	position:absolute;
-	background-color:#ffd;
-	height:100px;
-	width:100px;
-	padding:10px;
-	hyphens:manual;
-	overflow:hidden;
-	border-bottom-right-radius:20px;
-	overflow-wrap: anywhere;
-	box-shadow: 6px 14px 12px -7px #4442;
-}
-.postit.prepost {
-	height:0;
-	padding-top:0;
-	padding-bottom:0;
-	transform:skewx(30deg) translateX(70px);
-}
-
-button {
-	position:absolute;
-	top:10px;
-	left:10px;
-     padding:20px;
-}
-</style>
 
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://unpkg.com/draggabilly@2.3.0/dist/draggabilly.pkgd.min.js"></script>
 <script>
-var data;
-var charlimit = 77;
-var binId = "yKVddcjCYnHCLbMB";
-function getData(){
-	$.ajax({
-		url: '/bin/'+binId,
-		type: 'GET',
-		contentType: 'application/json',
-		success: function(response){
-			data = response.data;
-			DrawPostits(data);
+	var data;
+	var charlimit = 77;
+	var binId = "yKVddcjCYnHCLbMB";
+	function getData() {
+		$.ajax({
+			url: '/bin/' + binId,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (response) {
+				data = response.data;
+				DrawPostits(data);
+			}
+		});
+	}
+
+	function Setup() {
+		getData()
+		//	DrawPostits([{text:"hello there",position:{x:200,y:200}},{text:"hello there 123",position:{x:400,y:200}}]);
+	}
+
+	var newPostit;
+	function DrawPostits(postits) {
+		var counter = 0;
+		postits.forEach(i => {
+
+			createPostitHtml(i.text, i.position, counter);
+			counter++;
+		});
+	}
+
+	$(".new:not(.moving)").on("click", function () {
+		if (newPostit) {
+			return;
 		}
+		var text = prompt("What do you want your postit to say? (max " + charlimit + " chars)");
+
+		if (text == null || text.length > charlimit) {
+			return;
+		}
+
+		console.log("text recieved");
+		$(this).text("Drag to place postit");
+		newPostit = {};
+		newPostit.text = text;
+		$(this).addClass("moving");
+		var draggie = $('.moving').draggabilly({containment:".postits"}).on("dragEnd", place);
 	});
-}
 
-function Setup(){
-	getData()
-//	DrawPostits([{text:"hello there",position:{x:200,y:200}},{text:"hello there 123",position:{x:400,y:200}}]);
-}
+	function place(e) {
+		var conf = confirm("Do you want to place you postit here?");
 
-var newPostit;
-function DrawPostits(postits){
-	var counter = 0;
-	postits.forEach(i=>{
-		
-		createPostitHtml(i.text,i.position,counter);
-		counter++;
-	});
-}
+		if (!conf) {
+			return;
+		}
 
-$(".new:not(.moving)").on("click",function(){
-	if(newPostit){
-		return;
+		var offset = $(".moving").offset();
+		newPostit.position = { x: offset.left, y: offset.top };
+
+		$(".moving").removeClass("moving");
+		$("button").remove();
+
+		createPostitHtml(newPostit.text, newPostit.position);
+		makeNewPostit(newPostit.text, newPostit.position);
 	}
-	var text = prompt("What do you want your postit to say? (max "+charlimit+" chars)");
-	
-	if(text==null || text.length>charlimit){
-		return;
+
+	function makeNewPostit(text, position) {
+		console.log("making");
+		var postitToAdd = {
+			text: escapeHtml(text),
+			position: position
+		};
+		$.ajax({
+			url: '/bin/' + binId,
+			type: 'POST',
+			data: JSON.stringify(postitToAdd),
+			contentType: 'application/json',
+			success: function (response) {
+				console.log(JSON.stringify(response));
+			}
+		});
 	}
-	
-	console.log("text recieved");
-	$(this).text("Drag to place postit");
-	newPostit = {};
-	newPostit.text = text;
-	$(this).addClass("moving");
-	var draggie = $('.moving').draggabilly().on("dragEnd",place);
-});
 
-function place(e){
-	var conf = confirm("Do you want to place you postit here?");
-	
-	if(!conf){
-		return;
+	function createPostitHtml(text, position = { x: 1000, y: 1000 }, counter) {
+
+		var htmlString =
+			'<div class="postit prepost" ' +
+			'style="top:' + position.y + 'px;left:' + position.x + 'px;transition-delay:' +
+			(2 * counter / data.length) + 's">' +
+			escapeHtml(text) +
+			'</div>';
+		$(".postits").append(htmlString);
+		setTimeout(function () {
+			$(".prepost").removeClass("prepost");
+		}, 10);
+
 	}
-	
-	var offset = $(".moving").offset();
-	newPostit.position = {x:offset.left,y:offset.top};
-	
-	$(".moving").removeClass("moving");
-	$("button").remove();
-	
-	createPostitHtml(newPostit.text,newPostit.position);
-	makeNewPostit(newPostit.text,newPostit.position);
-}
-
-function makeNewPostit(text,position){
-	console.log("making");
-	var postitToAdd = {
-		text:escapeHtml(text),
-		position:position
-	};
-	$.ajax({
-    	url: '/bin/'+binId,
-		type: 'POST',
-		data:JSON.stringify(postitToAdd),
-        contentType: 'application/json',
-        success: function(response){
-            console.log(JSON.stringify(response));
-        }
-	});
-}
-
-function createPostitHtml(text,position={x:1000,y:1000},counter){
-	
-	var htmlString = 
-	    '<div class="postit prepost" '+
-	    'style="top:'+position.y+'px;left:'+position.x+'px;transition-delay:'+	 
-	    (2*counter/data.length)+'s">'+
-	    escapeHtml(text)+
-	    '</div>';
-	$(".postits").append(htmlString);
-	setTimeout(function(){
-		$(".prepost").removeClass("prepost");
-	},10);
-	
-}
 
 
-function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
-Setup();
+	function escapeHtml(unsafe) {
+		return unsafe
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#039;");
+	}
+	Setup();
 </script>

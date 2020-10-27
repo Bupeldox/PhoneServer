@@ -1,8 +1,5 @@
-const { createSecretKey } = require('crypto');
 const express = require('express');
 const fs = require('fs');
-const cors = require('cors');
-const { start } = require('repl');
 const app = express();
 const port = 3000;
 
@@ -31,10 +28,22 @@ function getFormattedDate(){
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
-})
+});
+
+app.get('/why', (req, res) => {
+    res.sendFile(__dirname + '/public/why.html');
+});
+
+app.get('/assets/:filename', (req,res) => {
+    var filename = req.params.filename;
+    res.sendFile(__dirname + '/public/assets/'+filename);
+});
+
+
 
 //Create
 app.post("/bin/create/:secret", (req, res) => {
+    //var password = fs.readFileSync(__dirname+'/private/SupahSecrets.txt');
     if (req.params.secret != "beepbapbook") {
         res.send({ success: false, message: "u scrub" });
         return;
@@ -48,6 +57,9 @@ app.post("/bin/create/:secret", (req, res) => {
 app.post("/bin/:binId", (req, res) => {
     var sentData = req.body;
     var binId = req.params.binId;
+    
+    //Dont save urls
+    sentData = JSON.parse(JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g,"*Redacted*"));
 
     if (Object.keys(sentData).length === 0) {
         res.send({ success: false, message: "Empty Object" });
@@ -134,14 +146,7 @@ function setBinsFromFile(){
 //===Startup
 
 function startup(){
-    /*
-    testing save
-    var myBinId = createBin();
-    addObjectToBin(myBinId,{text:"the first text?!"});
-    console.log(JSON.stringify(readBin(myBinId)));
 
-    saveBinsToFile();
-    */
     setBinsFromFile();
 
     setInterval(() => {
