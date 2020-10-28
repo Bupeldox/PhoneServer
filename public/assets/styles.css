@@ -34,6 +34,11 @@ body {
     overflow-wrap: anywhere;
     box-shadow: 6px 14px 12px -7px #4442;
 }
+.postit:hover {
+    transform: skew(10deg) translate(10px);
+    transition: 0.2s;
+    transition-delay: 0s!important;
+}
 
 .postit.noPlace {
     position: relative;
