@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport" content="width=800px, initial-scale=1 ">
     <title>Postits</title>
     <link rel="stylesheet" href="/assets/styles.css">
 </head>
@@ -14,138 +15,50 @@
         <a href="/" class="hiddenAnchor">
             <h2>Postits</h2>
         </a>
-        <a href="/why">Why tho?</a>
+
+        <a href="#" id="why-button">Why tho?</a>
     </div>
     <div class="container">
-        <div class="postits">
+        <div class="mainPosts">
+            <div class="postits mainPosts">
 
+            </div>
+            <button class="new" href="#">Create your postit</button>
         </div>
-        <button class="new">Create your postit</button>
+        <div class="whyPosts" style="display: none;">
+            <div class="postits static">
+                <div class="postit prepost noPlace">
+                    "Why did I do this" I hear you ask!
+                </div>
+                <div class="postit prepost noPlace">
+                    Just thought it could be cool. It gives me somewhere to practice web stuff too.
+                </div>
+            </div>
+            <div class="postits static">
+                <div class="postit prepost noPlace">
+                    Also, I wanted to host a website, and I had this idea for a while
+                </div>
+                <div class="postit prepost noPlace">
+                    I didn't want to host it on some cloud server for some reason so I made my own!
+                </div>
+                <div class="postit prepost noPlace">
+                    This website is hosted on my old andrioid phone using Termux!, the battery lasts for like 3 days.
+                </div>
+                <div class="postit prepost noPlace">
+                    I want to have the phone charged by a solar panel and just leave it on the roof of a shed.
+                </div>
+                <div class="postit prepost noPlace">
+                    But yea, I have this thing hosted on my phone now which I can do anything with!
+                </div>
+            </div>
+        </div>
     </div>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://unpkg.com/draggabilly@2.3.0/dist/draggabilly.pkgd.min.js"></script>
-    <script>
-        var data;
-        var charlimit = 77;
-        var binId = "yKVddcjCYnHCLbMB";
-
-        function getData() {
-            $.ajax({
-                url: '/bin/' + binId,
-                type: 'GET',
-                contentType: 'application/json',
-                success: function(response) {
-                    data = response.data;
-                    DrawPostits(data);
-                }
-            });
-        }
-
-        function Setup() {
-            getData()
-                //	DrawPostits([{text:"hello there",position:{x:200,y:200}},{text:"hello there 123",position:{x:400,y:200}}]);
-        }
-
-        var newPostit;
-
-        function DrawPostits(postits) {
-            var counter = 0;
-            postits.forEach(i => {
-
-                createPostitHtml(i.text, i.position, counter);
-                counter++;
-            });
-        }
-
-        $(".new:not(.moving)").on("click", function() {
-            if (newPostit) {
-                return;
-            }
-            var text = prompt("What do you want your postit to say? (max " + charlimit + " chars)");
-
-            if (text == null || text.length > charlimit) {
-                return;
-            }
-
-            console.log("text recieved");
-            $(this).text("Drag to place postit");
-            newPostit = {};
-            newPostit.text = text;
-            $(this).addClass("moving");
-            var draggie = $('.moving').draggabilly({
-                containment: ".postits"
-            }).on("dragEnd", place);
-        });
-
-        function place(e) {
-            var conf = confirm("Do you want to place you postit here?");
-
-            if (!conf) {
-                return;
-            }
-
-            var offset = $(".moving").offset();
-            newPostit.position = {
-                x: offset.left,
-                y: offset.top
-            };
-
-            $(".moving").removeClass("moving");
-            $("button").remove();
-
-            createPostitHtml(newPostit.text, newPostit.position);
-            makeNewPostit(newPostit.text, newPostit.position);
-        }
-
-        function makeNewPostit(text, position) {
-            console.log("making");
-            var postitToAdd = {
-                text: escapeHtml(text),
-                position: position
-            };
-            $.ajax({
-                url: '/bin/' + binId,
-                type: 'POST',
-                data: JSON.stringify(postitToAdd),
-                contentType: 'application/json',
-                success: function(response) {
-                    console.log(JSON.stringify(response));
-                }
-            });
-        }
-
-        function createPostitHtml(text, position = {
-            x: 1000,
-            y: 1000
-        }, counter) {
-
-            var htmlString =
-                '<div class="postit prepost" ' +
-                'style="top:' + position.y + 'px;left:' + position.x + 'px;transition-delay:' +
-                (2 * counter / data.length) + 's">' +
-                escapeHtml(text) +
-                '</div>';
-            $(".postits").append(htmlString);
-            setTimeout(function() {
-                $(".prepost").removeClass("prepost");
-            }, 10);
-
-        }
-
-
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-        $(()=>{
-            Setup();    
-        });
-        
+    <script src="assets/script.js">
     </script>
 </body>
+
 </html>
