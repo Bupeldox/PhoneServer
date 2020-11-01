@@ -28,7 +28,7 @@ function getFormattedDate() {
 
 //Index
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/postits/index.html');
+    res.sendFile(__dirname + '/public/home/index.html');
 });
 
 //Create
@@ -79,6 +79,11 @@ app.get('/:area/assets/:filename', (req, res) => {
     var filename = req.params.filename;
     var area = req.params.area;
     res.sendFile(__dirname + '/public/' + area + '/assets/' + filename);
+});
+//html indexs
+app.get("/:area", (req, res) => {
+    var area = req.params.area;
+    res.sendFile(__dirname + '/public/' + area + '/index.html');
 });
 
 //htmls

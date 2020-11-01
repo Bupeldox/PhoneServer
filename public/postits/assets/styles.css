@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Trispace&display=swap');
 body {
-    margin: 29px 26px;
+    margin: 45px 26px;
     position: relative;
     overflow: hidden;
     color: #020301;
@@ -98,7 +98,6 @@ button.new {
 .header {
     height: 45px;
     margin: 10px;
-
     font-family: 'Trispace', sans-serif;
     display: flex;
     justify-content: space-between;
