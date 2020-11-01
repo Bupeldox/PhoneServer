@@ -26,8 +26,6 @@ function getFormattedDate() {
 
 //====Routing
 
-
-
 //Index
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/postits/index.html');

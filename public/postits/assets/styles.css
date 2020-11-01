@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Trispace&display=swap');
 body {
-    margin: 0;
+    margin: 29px 26px;
     position: relative;
     overflow: hidden;
     color: #020301;
+}
+
+@media(max-width:800px) {
+    body {
+        margin: 0;
+    }
 }
 
 .postits {
@@ -13,6 +19,17 @@ body {
     font-size: 13.3px;
     font-family: serif;
 }
+
+
+/*
+@media(max-width:800px) {
+    .postits {
+        width: 200%;
+        height: calc(200vh - 50px);
+        transform: scale(0.5);
+        transform-origin: top left;
+    }
+}*/
 
 .postits.static {
     display: flex;
@@ -34,6 +51,11 @@ body {
     overflow-wrap: anywhere;
     box-shadow: 6px 14px 12px -7px #4442;
 }
+
+.postit.placed {
+    transition-delay: 0;
+}
+
 .postit:hover {
     transform: skew(10deg) translate(10px);
     transition: 0.2s;
@@ -52,12 +74,22 @@ body {
     transform: skewx(30deg) translateX(70px);
 }
 
-button {
+button.new {
     position: absolute;
     top: 10px;
     left: 10px;
     padding: 20px;
 }
+
+
+/* 
+.new:not(.moving) {
+    float: left;
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 13px;
+} */
 
 .container {
     position: relative;
@@ -65,8 +97,8 @@ button {
 
 .header {
     height: 45px;
-    overflow: hidden;
-    margin: 1em;
+    margin: 10px;
+
     font-family: 'Trispace', sans-serif;
     display: flex;
     justify-content: space-between;
