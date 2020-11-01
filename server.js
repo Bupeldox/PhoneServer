@@ -83,6 +83,7 @@ app.get('/:area/assets/:filename', (req, res) => {
 //html indexs
 app.get("/:area", (req, res) => {
     var area = req.params.area;
+    console.log("Page Accesed: " + area + " at " + getFormattedDate())
     res.sendFile(__dirname + '/public/' + area + '/index.html');
 });
 
