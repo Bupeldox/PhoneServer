@@ -5,6 +5,11 @@ const port = 3000;
 
 app.use(express.json());
 
+app.use(function (err, req, res, next) {
+  console.error("== Error ==:"+err.stack)
+  res.status(500).send('Something broke!');
+});
+
 let Bins = {};
 let NeedToSave = false;
 
