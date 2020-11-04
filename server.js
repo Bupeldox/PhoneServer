@@ -149,9 +149,9 @@ function saveBinsToFile() {
 function setBinsFromFile() {
     fs.readFile(__dirname + '/private/JsonBins.json', 'utf8', function(error, data) {
         if (error) { throw error; }
-        console.log(data);
         var rawData = JSON.parse(data); //{[]}
         Bins = rawData;
+        console.log("Bins Loaded");
     });
 }
 
