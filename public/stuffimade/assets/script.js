@@ -61,6 +61,7 @@ function detectMob() {
     });
 }
 $(document).ready(()=>{
+    /*
     try{
         if (!detectMob()) {
             var Scrollbar = window.Scrollbar;
@@ -88,5 +89,6 @@ $(document).ready(()=>{
     }catch(e){
         console.log(e);
     }
+    */
     initAnimations();
 });
