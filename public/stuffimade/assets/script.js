@@ -13,8 +13,6 @@ function multiImageMove(selector) {
                     start: "top bottom",
                     end: "bottom top",
                     ease: "power1.inOut"
-                        //ease: "liniar",
-                        //markers:true,
                 }
             });
         });

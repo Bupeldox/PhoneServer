@@ -13,9 +13,7 @@ function multiImageMove(selector) {
           trigger: $(e).parent(".shuttleContainer"),
           start: "top bottom",
           end: "bottom top",
-          ease: "power1.inOut" //ease: "liniar",
-          //markers:true,
-
+          ease: "power1.inOut"
         }
       });
     });
