@@ -60,26 +60,35 @@ function detectMob() {
         return navigator.userAgent.match(toMatchItem);
     });
 }
+$(document).ready(()=>{
+    /*
+    try{
+        if (!detectMob()) {
+            var Scrollbar = window.Scrollbar;
 
-if (!detectMob()) {
-    // 3rd party library setup:
-    const bodyScrollBar = Scrollbar.init(document.body, { damping: 0.1, renderByPixels: true });
+            // 3rd party library setup:
+            const bodyScrollBar = Scrollbar.init(document.body, { damping: 0.1, renderByPixels: true });
 
-    // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element: 
-    ScrollTrigger.scrollerProxy(document.body, {
-        scrollTop(value) {
-            if (arguments.length) {
-                bodyScrollBar.scrollTop = value; // setter
-            }
-            return bodyScrollBar.scrollTop; // getter
-        },
-        getBoundingClientRect() {
-            return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+            // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element: 
+            ScrollTrigger.scrollerProxy(document.body, {
+                scrollTop(value) {
+                    if (arguments.length) {
+                        bodyScrollBar.scrollTop = value; // setter
+                    }
+                    return bodyScrollBar.scrollTop; // getter
+                },
+                getBoundingClientRect() {
+                    return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+                }
+            });
+
+            // when the smooth scroller updates, tell ScrollTrigger to update() too: 
+            bodyScrollBar.addListener(ScrollTrigger.update);
+
         }
-    });
-
-    // when the smooth scroller updates, tell ScrollTrigger to update() too: 
-    bodyScrollBar.addListener(ScrollTrigger.update);
-
-}
-initAnimations();
+    }catch(e){
+        console.log(e);
+    }
+    */
+    initAnimations();
+});

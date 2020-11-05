@@ -5,6 +5,11 @@ const port = 3000;
 
 app.use(express.json());
 
+app.use(function (err, req, res, next) {
+  console.error("== Error ==:"+err.stack)
+  res.status(500).send('Something broke!');
+});
+
 let Bins = {};
 let NeedToSave = false;
 
@@ -144,9 +149,9 @@ function saveBinsToFile() {
 function setBinsFromFile() {
     fs.readFile(__dirname + '/private/JsonBins.json', 'utf8', function(error, data) {
         if (error) { throw error; }
-        console.log(data);
         var rawData = JSON.parse(data); //{[]}
         Bins = rawData;
+        console.log("Bins Loaded");
     });
 }
 
