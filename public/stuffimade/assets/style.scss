@@ -17,41 +17,38 @@ body {
 }
 
 .section {
-    height: 80vh;
+    min-zoom: 80vh;
     display: flex;
     justify-content: center;
     align-content: center;
     align-items: flex-start;
+    .area {
+        margin: 0px 22px;
+    }
+    &.imageSection {
+        height: 100vh;
+        .image {
+            height: 60vh;
+            flex: 1 1;
+            margin: 20px;
+        }
+    }
+    &.textSection {
+        padding: 0 calc(9vw + 19px);
+        align-content: center;
+    }
+    &.s1 {
+        height: 75vh;
+        padding-top: 25vh;
+    }
 }
 
-.section .area {
-    margin: 0px 22px;
-}
-
-.section.imageSection {
-    height: 100vh;
-}
-
-.section.imageSection .image {
-    height: 60vh;
-    flex: 1 1;
-    margin: 20px;
-}
-
-.section.textSection {
-    padding: 0 calc(9vw + 19px);
-    align-content: center;
-}
-
-.section.smallText {
+.smallText {
     height: 30px;
     font-style: italic;
     font-size: 0.75em;
-}
-
-.section.s1 {
-    height: 75vh;
-    padding-top: 25vh;
+    height: auto;
+    margin-top: 10px!important;
 }
 
 h1 {
@@ -72,10 +69,12 @@ h2 {
     flex: 1 1;
 }
 
-.image {
+.textImage {
     width: 30%;
     flex: 2 1;
-    float: right;
+}
+
+.image {
     height: 50vh;
     overflow: hidden;
     box-sizing: border-box;
