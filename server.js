@@ -5,9 +5,9 @@ const port = 3000;
 
 app.use(express.json());
 
-app.use(function (err, req, res, next) {
-  console.error("== Error ==:"+err.stack)
-  res.status(500).send('Something broke!');
+app.use(function(err, req, res, next) {
+    console.error("== Error ==:" + err.stack)
+    res.status(500).send('Something broke!');
 });
 
 let Bins = {};
@@ -83,7 +83,16 @@ app.get("/bin/:binId", (req, res) => {
 app.get('/:area/assets/:filename', (req, res) => {
     var filename = req.params.filename;
     var area = req.params.area;
-    res.sendFile(__dirname + '/public/' + area + '/assets/' + filename);
+    try {
+        if (fs.existsSync(__dirname + '/public/' + area + '/assets/' + filename)) {
+            //file exists
+            res.sendFile(__dirname + '/public/' + area + '/assets/' + filename);
+        } else {
+            res.sendFile(__dirname + '/public/' + area + '/assets/dist/' + filename);
+        }
+    } catch (err) {
+        console.error(err)
+    }
 });
 //html indexs
 app.get("/:area", (req, res) => {

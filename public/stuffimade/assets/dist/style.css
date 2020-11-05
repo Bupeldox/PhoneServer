@@ -23,26 +23,32 @@ body {
   align-content: center;
   align-items: flex-start;
 }
+
 .section .area {
   margin: 0px 22px;
 }
+
 .section.imageSection {
   height: 100vh;
 }
+
 .section.imageSection .image {
   height: 60vh;
   flex: 1 1;
   margin: 20px;
 }
+
 .section.textSection {
   padding: 0 calc(9vw + 19px);
   align-content: center;
 }
+
 .section.smallText {
   height: 30px;
   font-style: italic;
   font-size: 0.75em;
 }
+
 .section.s1 {
   height: 75vh;
   padding-top: 25vh;
@@ -119,11 +125,14 @@ h2 {
   line-height: 0.5;
   text-align: center;
 }
+
 .fancy span {
   display: inline-block;
   position: relative;
 }
-.fancy span:before, .fancy span:after {
+
+.fancy span:before,
+.fancy span:after {
   content: "";
   position: absolute;
   height: 4px;
@@ -131,11 +140,21 @@ h2 {
   top: 0;
   width: 1em;
 }
+
 .fancy span:before {
   right: 100%;
   margin-right: 15px;
 }
+
 .fancy span:after {
   left: 100%;
   margin-left: 15px;
+}
+
+#my-scrollbar {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
 }

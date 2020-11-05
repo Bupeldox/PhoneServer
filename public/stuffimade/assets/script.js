@@ -60,14 +60,16 @@ function detectMob() {
         return navigator.userAgent.match(toMatchItem);
     });
 }
-$(document).ready(()=>{
-    /*
-    try{
+
+var bodyScrollBar;
+$(document).ready(() => {
+
+    try {
         if (!detectMob()) {
             var Scrollbar = window.Scrollbar;
 
             // 3rd party library setup:
-            const bodyScrollBar = Scrollbar.init(document.body, { damping: 0.1, renderByPixels: true });
+            bodyScrollBar = Scrollbar.init(document.querySelector('#my-scrollbar'), { damping: 0.1, renderByPixels: true });
 
             // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element: 
             ScrollTrigger.scrollerProxy(document.body, {
@@ -86,9 +88,9 @@ $(document).ready(()=>{
             bodyScrollBar.addListener(ScrollTrigger.update);
 
         }
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
-    */
+
     initAnimations();
 });
