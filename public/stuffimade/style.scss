@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Istok+Web&family=Lora&display=swap');
+$col1:hsl(25 100% 96% / 1);
+$col2:#1f1b1c;
+$col3:#c0ffee;
+$col4:#bed;
+body {
+    margin: 0;
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    background-color: $col1;
+    color: $col2;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.container {
+    margin: 0px calc(10vw + 6px);
+    //margin-top: 125px;
+}
+
+.section {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: flex-start;
+    .area {
+        margin: 0px 22px;
+    }
+    &.imageSection {
+        height: 100vh;
+        .image {
+            height: 60vh;
+            flex: 1 1;
+            margin: 20px;
+        }
+    }
+    &.textSection {
+        padding: 0 calc(9vw + 19px);
+        align-content: center;
+    }
+    &.smallText {
+        height: 30px;
+        font-style: italic;
+        font-size: 0.75em;
+    }
+    &.s1 {
+        height: 75vh;
+        padding-top: 25vh;
+    }
+}
+
+h1 {
+    font-size: 4em;
+    margin: 0;
+    font-family: 'Istok Web', sans-serif;
+}
+
+h2 {
+    font-size: 3em;
+    margin: 0;
+    font-family: 'Istok Web', sans-serif;
+}
+
+.text {
+    width: 60%;
+    float: left;
+    flex: 1 1;
+}
+
+.image {
+    width: 30%;
+    flex: 2 1;
+    float: right;
+    height: 50vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-radius: 50px;
+}
+
+.img {
+    content: "";
+    position: absolute;
+    height: 100%;
+    z-index: -1;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    box-shadow: inset -2px -1px 20px 13px #54545411;
+}
+
+.parallax .img {
+    height: calc(100% + 40px);
+    //width: calc(100% + 100px);
+    //left: -100px;
+    top: -60px;
+    background-position-y: 70%;
+}
+
+//===================Scroll========================
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+ ::-webkit-scrollbar-track {
+    background: $col1;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: $col2;
+    border-radius: 100px;
+    width: 8px;
+    box-shadow: inset 0 0 0 4px $col1, 0 0 0 1px $col1;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: $col2;
+    border-radius: 100px;
+    width: 8px;
+}
+
+.fancy {
+    line-height: 0.5;
+    text-align: center;
+    span {
+        display: inline-block;
+        position: relative;
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            height: 4px;
+            border-bottom: 1px solid $col2;
+            // border-top: 1px solid $col2;
+            top: 0;
+            width: 1em;
+        }
+        &:before {
+            right: 100%;
+            margin-right: 15px;
+        }
+        &:after {
+            left: 100%;
+            margin-left: 15px;
+        }
+    }
+}
