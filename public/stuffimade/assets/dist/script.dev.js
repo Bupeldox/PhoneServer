@@ -20,16 +20,18 @@ function multiImageMove(selector) {
 
 function parallax(selector) {
   //parallax 
-  gsap.to(selector + " .image .img", {
-    y: 40,
-    scrollTrigger: {
-      // scrub: 0.5,
-      scrub: 0.1,
-      trigger: selector + ".imageSection",
-      start: "top bottom",
-      end: "bottom top",
-      ease: "power1.inOut"
-    }
+  $(selector + " .image .img").each(function (i, e) {
+    gsap.to(e, {
+      y: 70,
+      scrollTrigger: {
+        // scrub: 0.5,
+        scrub: 0.1,
+        trigger: $(e).parent()[0],
+        start: "top bottom",
+        end: "bottom top",
+        ease: "linear"
+      }
+    });
   });
 }
 
@@ -57,40 +59,41 @@ function detectMob() {
   });
 }
 
-var bodyScrollBar;
-$(document).ready(function () {
-  try {
-    if (!detectMob()) {
-      var Scrollbar = window.Scrollbar; // 3rd party library setup:
+$(function () {
+  setTimeout(function () {
+    try {
+      if (!detectMob()) {
+        var Scrollbar = window.Scrollbar; // 3rd party library setup:
 
-      bodyScrollBar = Scrollbar.init(document.querySelector('#my-scrollbar'), {
-        damping: 0.1,
-        renderByPixels: true
-      }); // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element: 
+        var bodyScrollBar = Scrollbar.init(document.querySelector('#my-scrollbar'), {
+          damping: 0.1,
+          renderByPixels: true
+        }); // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element: 
 
-      ScrollTrigger.scrollerProxy(document.body, {
-        scrollTop: function scrollTop(value) {
-          if (arguments.length) {
-            bodyScrollBar.scrollTop = value; // setter
+        ScrollTrigger.scrollerProxy(document.body, {
+          scrollTop: function scrollTop(value) {
+            if (arguments.length) {
+              bodyScrollBar.scrollTop = value; // setter
+            }
+
+            return bodyScrollBar.scrollTop; // getter
+          },
+          getBoundingClientRect: function getBoundingClientRect() {
+            return {
+              top: 0,
+              left: 0,
+              width: window.innerWidth,
+              height: window.innerHeight
+            };
           }
+        }); // when the smooth scroller updates, tell ScrollTrigger to update() too: 
 
-          return bodyScrollBar.scrollTop; // getter
-        },
-        getBoundingClientRect: function getBoundingClientRect() {
-          return {
-            top: 0,
-            left: 0,
-            width: window.innerWidth,
-            height: window.innerHeight
-          };
-        }
-      }); // when the smooth scroller updates, tell ScrollTrigger to update() too: 
-
-      bodyScrollBar.addListener(ScrollTrigger.update);
+        bodyScrollBar.addListener(ScrollTrigger.update);
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
-  }
 
-  initAnimations();
+    initAnimations();
+  }, 1000);
 });
