@@ -35,19 +35,25 @@ body {
   margin: 20px;
 }
 .section.textSection {
-  padding: 0 calc(9vw + 19px);
+  padding: 0 calc(9vw + 19px) 100px calc(9vw + 19px);
   align-content: center;
+  height: 80vh;
 }
 .section.s1 {
   height: 75vh;
   padding-top: 25vh;
 }
 
+.shuttleContainer > * {
+  flex: 1 1;
+}
+
 .smallText {
   height: 30px;
   font-style: italic;
   font-size: 0.75em;
-  height: auto;
+  padding-bottom: 0px !important;
+  height: auto !important;
   margin-top: 10px !important;
 }
 

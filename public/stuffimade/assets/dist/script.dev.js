@@ -2,30 +2,34 @@
 
 function multiImageMove(selector) {
   //move many
-  gsap.to(selector + " .image", {
-    y: function y(i, t) {
-      return i / $(t).siblings().length * 30 + "vh";
-    },
-    scrollTrigger: {
-      scrub: 0.1,
-      trigger: ".imageSection" + selector,
-      start: "top bottom",
-      end: "bottom top",
-      ease: "power1.inOut" //ease: "liniar",
-      //markers:true,
+  //in a container of .shuttleContainer
+  $(selector + ".shuttleContainer").each(function (pi, pe) {
+    var lastChildIndex = $(pe).children().length - 1;
+    $(pe).children().each(function (i, e) {
+      gsap.to(e, {
+        y: 30 * i / lastChildIndex + "vh",
+        scrollTrigger: {
+          scrub: 0.1,
+          trigger: $(e).parent(".shuttleContainer"),
+          start: "top bottom",
+          end: "bottom top",
+          ease: "power1.inOut" //ease: "liniar",
+          //markers:true,
 
-    }
+        }
+      });
+    });
   });
 }
 
 function parallax(selector) {
   //parallax 
-  $(selector + " .image .img").each(function (i, e) {
+  //put .parallax on a container and everything inside will have parallax.
+  $(selector + ".parallax > *").each(function (i, e) {
     gsap.to(e, {
       y: 70,
       scrollTrigger: {
-        // scrub: 0.5,
-        scrub: 0.1,
+        scrub: true,
         trigger: $(e).parent()[0],
         start: "top bottom",
         end: "bottom top",
@@ -36,20 +40,8 @@ function parallax(selector) {
 }
 
 function initAnimations() {
-  multiImageMove(".s4"); //motor
-
-  parallax(".s4");
-  multiImageMove(".s3"); //arduinos
-
-  parallax(".s3");
-  parallax(".s5"); //coaster
-
-  multiImageMove(".s6"); //lens
-
-  parallax(".s6");
-  multiImageMove(".s7"); //night light
-
-  parallax(".s7");
+  parallax("");
+  multiImageMove(""); //motor
 }
 
 function detectMob() {
