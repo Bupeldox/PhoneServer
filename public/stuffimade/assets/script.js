@@ -61,7 +61,7 @@ function detectMob() {
 $(function() {
     setTimeout(() => {
         try {
-            if (!detectMob()) {
+         //   if (!detectMob()) {
                 var Scrollbar = window.Scrollbar;
 
                 // 3rd party library setup:
@@ -86,7 +86,7 @@ $(function() {
                 // when the smooth scroller updates, tell ScrollTrigger to update() too: 
                 bodyScrollBar.addListener(ScrollTrigger.update);
 
-            }
+        //    }
         } catch (e) {
             console.log(e);
         }
