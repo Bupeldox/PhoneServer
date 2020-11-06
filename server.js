@@ -36,77 +36,106 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/home/index.html');
 });
 
-//Create
-app.post("/bin/create/:secret", (req, res) => {
-    //var password = fs.readFileSync(__dirname+'/private/SupahSecrets.txt');
-    if (req.params.secret != "beepbapbook") {
-        res.send({ success: false, message: "u scrub" });
-        return;
-    }
-    var binId = createBin();
-
-    res.send({ success: true, binId: binId });
+//favicon
+app.get("/favicon.ico",(req, res)=>{
+    res.send().status(404);
 });
 
-//Add
-app.post("/bin/:binId", (req, res) => {
-    var sentData = req.body;
-    var binId = req.params.binId;
+//==Bins
+    //Create
+    app.post("/bin/create/:secret", (req, res) => {
+        //var password = fs.readFileSync(__dirname+'/private/SupahSecrets.txt');
+        if (req.params.secret != "beepbapbook") {
+            res.send({ success: false, message: "u scrub" });
+            return;
+        }
+        var binId = createBin();
 
-    //Dont save urls
-    sentData = JSON.parse(JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g, "*Redacted*"));
+        res.send({ success: true, binId: binId });
+    });
 
-    if (Object.keys(sentData).length === 0) {
-        res.send({ success: false, message: "Empty Object" });
-        return;
-    }
-    if (!Bins.hasOwnProperty(binId)) {
-        res.send({ success: false, message: "Bad id" });
-        return;
-    }
-    addObjectToBin(binId, sentData);
-    res.send({ success: true });
-});
+    //Add
+    app.post("/bin/:binId", (req, res) => {
+        var sentData = req.body;
+        var binId = req.params.binId;
 
-//Get
-app.get("/bin/:binId", (req, res) => {
-    var binId = req.params.binId;
-    if (!Bins.hasOwnProperty(binId)) {
-        res.send({ success: false, message: "bad Id" });
-        return;
-    }
-    var toSend = readBin(binId);
-    res.send({ success: true, data: toSend });
-})
+        //Dont save urls
+        sentData = JSON.parse(JSON.stringify(sentData).replace(/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/g, "*Redacted*"));
 
+        if (Object.keys(sentData).length === 0) {
+            res.send({ success: false, message: "Empty Object" });
+            return;
+        }
+        if (!Bins.hasOwnProperty(binId)) {
+            res.send({ success: false, message: "Bad id" });
+            return;
+        }
+        addObjectToBin(binId, sentData);
+        res.send({ success: true });
+    });
+
+    //Get
+    app.get("/bin/:binId", (req, res) => {
+        var binId = req.params.binId;
+        if (!Bins.hasOwnProperty(binId)) {
+            res.send({ success: false, message: "bad Id" });
+            return;
+        }
+        var toSend = readBin(binId);
+        res.send({ success: true, data: toSend });
+    })
+//==End bins
 //Assets
 app.get('/:area/assets/:filename', (req, res) => {
     var filename = req.params.filename;
     var area = req.params.area;
+    var patha = __dirname + '/public/' + area + '/assets/' + filename;
+    var pathb = __dirname + '/public/' + area + '/assets/dist/' + filename;
+    
     try {
-        if (fs.existsSync(__dirname + '/public/' + area + '/assets/' + filename)) {
-            //file exists
-            res.sendFile(__dirname + '/public/' + area + '/assets/' + filename);
-        } else {
-            res.sendFile(__dirname + '/public/' + area + '/assets/dist/' + filename);
+        fs.accessSync(patha);
+        res.sendFile(patha);
+    } 
+    catch
+    {
+        try{
+            fs.accessSync(pathb);
+            res.sendFile(pathb);
         }
-    } catch (err) {
-        console.error(err)
+        catch{
+            console.log("== Error Accessing invalid file: "+patha);
+            res.send("Oops, looks like that doesn't exits.<br> Have a look <a href='/'>here</a> instead").status(404);
+        }
     }
 });
 //html indexs
 app.get("/:area", (req, res) => {
     var area = req.params.area;
     console.log("Page Accesed: " + area + " at " + getFormattedDate())
-    res.sendFile(__dirname + '/public/' + area + '/index.html');
+    mySendFile(__dirname + '/public/' + area + '/index.html',res);
 });
 
 //htmls
 app.get("/:area/:page", (req, res) => {
     var area = req.params.area;
     var page = req.params.page;
-    res.sendFile(__dirname + '/public/' + area + '/' + page + '.html');
+    var path = __dirname + '/public/' + area + '/' + page + '.html';
+    mySendFile(path,res);
 });
+
+
+function mySendFile(path,res){
+    try{
+        fs.accessSync(path)
+        res.sendFile(path);
+        return true;
+    }catch{
+        console.log("== Error Accessing invalid file: "+path);
+        res.send("Oops, looks like that doesn't exits.<br> Have a look <a href='/'>here</a> instead").status(404);
+        return false;
+
+    }
+}
 
 
 //====Funcs

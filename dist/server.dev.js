@@ -34,7 +34,12 @@ function getFormattedDate() {
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/public/home/index.html');
-}); //Create
+}); //favicon
+
+app.get("/favicon.ico", function (req, res) {
+  res.send().status(404);
+}); //==Bins
+//Create
 
 app.post("/bin/create/:secret", function (req, res) {
   //var password = fs.readFileSync(__dirname+'/private/SupahSecrets.txt');
@@ -97,35 +102,54 @@ app.get("/bin/:binId", function (req, res) {
     success: true,
     data: toSend
   });
-}); //Assets
+}); //==End bins
+//Assets
 
 app.get('/:area/assets/:filename', function (req, res) {
   var filename = req.params.filename;
   var area = req.params.area;
+  var patha = __dirname + '/public/' + area + '/assets/' + filename;
+  var pathb = __dirname + '/public/' + area + '/assets/dist/' + filename;
 
   try {
-    if (fs.existsSync(__dirname + '/public/' + area + '/assets/' + filename)) {
-      //file exists
-      res.sendFile(__dirname + '/public/' + area + '/assets/' + filename);
-    } else {
-      res.sendFile(__dirname + '/public/' + area + '/assets/dist/' + filename);
+    fs.accessSync(patha);
+    res.sendFile(patha);
+  } catch (_unused) {
+    try {
+      fs.accessSync(pathb);
+      res.sendFile(pathb);
+    } catch (_unused2) {
+      console.log("== Error Accessing invalid file: " + patha);
+      res.send("Oops, looks like that doesn't exits.<br> Have a look <a href='/'>here</a> instead").status(404);
     }
-  } catch (err) {
-    console.error(err);
   }
 }); //html indexs
 
 app.get("/:area", function (req, res) {
   var area = req.params.area;
   console.log("Page Accesed: " + area + " at " + getFormattedDate());
-  res.sendFile(__dirname + '/public/' + area + '/index.html');
+  mySendFile(__dirname + '/public/' + area + '/index.html', res);
 }); //htmls
 
 app.get("/:area/:page", function (req, res) {
   var area = req.params.area;
   var page = req.params.page;
-  res.sendFile(__dirname + '/public/' + area + '/' + page + '.html');
-}); //====Funcs
+  var path = __dirname + '/public/' + area + '/' + page + '.html';
+  mySendFile(path, res);
+});
+
+function mySendFile(path, res) {
+  try {
+    fs.accessSync(path);
+    res.sendFile(path);
+    return true;
+  } catch (_unused3) {
+    console.log("== Error Accessing invalid file: " + path);
+    res.send("Oops, looks like that doesn't exits.<br> Have a look <a href='/'>here</a> instead").status(404);
+    return false;
+  }
+} //====Funcs
+
 
 function createBin() {
   var binId = randomString();
