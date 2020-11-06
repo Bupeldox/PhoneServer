@@ -224,4 +224,5 @@ function startup() {
 app.listen(port, function () {
   console.log("Example app listening at http://localhost:".concat(port));
   startup();
+  console.log("==============Server Started at " + getFormattedDate());
 });
